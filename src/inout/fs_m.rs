@@ -1,7 +1,5 @@
 use std::ffi::CString;
 
-use crate::inout::{self, Error};
-
 pub struct OpenOptions {
     access_mode: i32,
 }
@@ -43,24 +41,7 @@ impl OpenOptions {
 }
 
 pub struct File {
-    fd: i32,
-}
-
-impl File {
-    pub fn read(&self, buf: &mut [u8]) -> Result<usize, Error> {
-        let bytes_read =
-            unsafe { libc::read(
-                self.fd, 
-                buf.as_mut_ptr() as *mut libc::c_void, 
-                buf.len()
-            ) 
-        };
-        if bytes_read < 0 {
-            return Err(inout::Error::last_os_error())
-        } 
-
-        Ok(bytes_read as usize)
-    }
+    pub fd: i32,
 }
 
 impl Drop for File {
